@@ -37,52 +37,63 @@ This Restaurant Management System (RMS) solves that by providing a single backen
 | Database | MongoDB + Mongoose |
 | Auth | JWT + bcrypt |
 | Dev Tools | Nodemon, Morgan, CORS, Dotenv |
-## 🏗️ System Architecture
 
-### High-Level Architecture
+erDiagram
+    USER {
+        ObjectId _id PK
+        string email UK
+        string password
+        string role
+    }
 
-```mermaid
-flowchart TB
-    subgraph Client["🖥️ Client Layer"]
-        UI[Web / Mobile UI]
-        PM[Postman / API Clients]
-    end
+    MENU_ITEM {
+        ObjectId _id PK
+        string name UK
+        number price
+        string category
+        boolean available
+        array recipe
+    }
 
-    subgraph API["⚙️ Express.js API Server"]
-        MW[Middleware<br/>CORS · JSON · JWT Auth · Error Handler]
-        
-        subgraph Routes["API Routes"]
-            R1[/api/auth]
-            R2[/api/menu]
-            R3[/api/tables]
-            R4[/api/reservations]
-            R5[/api/orders]
-            R6[/api/inventory]
-            R7[/api/reports]
-        end
-        
-        subgraph Logic["Business Logic"]
-            L1[Order Processing]
-            L2[Table Availability Check]
-            L3[Inventory Auto-Deduct]
-            L4[JWT Authentication]
-        end
-    end
+    INVENTORY {
+        ObjectId _id PK
+        string name UK
+        number quantity
+        number threshold
+        string unit
+    }
 
-    subgraph DB["🗄️ MongoDB Database"]
-        M1[(users)]
-        M2[(menu_items)]
-        M3[(tables)]
-        M4[(reservations)]
-        M5[(orders)]
-        M6[(inventory)]
-    end
+    TABLE {
+        ObjectId _id PK
+        number number UK
+        number capacity
+        string status
+        string location
+    }
 
-    UI --> MW
-    PM --> MW
-    MW --> Routes
-    Routes --> Logic
-    Logic --> DB
+    RESERVATION {
+        ObjectId _id PK
+        ObjectId table FK
+        string customerName
+        datetime reservationTime
+        string status
+    }
+
+    ORDER {
+        ObjectId _id PK
+        string orderNumber UK
+        ObjectId table FK
+        array items
+        number total
+        string status
+    }
+
+    MENU_ITEM ||--o{ INVENTORY : "recipe consumes"
+    TABLE ||--o{ RESERVATION : "is booked by"
+    TABLE ||--o{ ORDER : "serves"
+    ORDER }o--|| MENU_ITEM : "contains"
+    USER ||--o{ ORDER : "processes"
+
 ## Why This Project
 
 This project demonstrates real-world backend engineering: schema design for related entities, business logic layered on top of CRUD, authentication, transactional thinking (inventory consistency), and reporting — all the pieces that interviewers and production systems care about.
