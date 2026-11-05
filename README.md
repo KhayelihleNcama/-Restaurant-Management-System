@@ -57,53 +57,7 @@ This Restaurant Management System (RMS) solves that by providing a single backen
 
 ## System Architecture
 
-### 1. High-Level Architecture
 
-```mermaid
-flowchart TB
-    subgraph Client["Client Layer"]
-        UI[Web / Mobile UI]
-        PM[Postman / API Clients]
-    end
-
-    subgraph API["Express.js API Server"]
-        MW[Middleware<br/>CORS · JSON · JWT Auth · Error Handler]
-
-        subgraph Routes["API Routes"]
-            R1["/api/auth"]
-            R2["/api/menu"]
-            R3["/api/tables"]
-            R4["/api/reservations"]
-            R5["/api/orders"]
-            R6["/api/inventory"]
-            R7["/api/reports"]
-        end
-
-        subgraph Logic["Business Logic"]
-            L1[Order Processing]
-            L2[Table Availability Check]
-            L3[Inventory Auto-Deduct]
-            L4[JWT Authentication]
-        end
-    end
-
-    subgraph DB["MongoDB Database"]
-        M1[(users)]
-        M2[(menu_items)]
-        M3[(tables)]
-        M4[(reservations)]
-        M5[(orders)]
-        M6[(inventory)]
-    end
-
-    UI --> MW
-    PM --> MW
-    MW --> Routes
-    Routes --> Logic
-    Logic --> DB
-```
-
-<details>
 <summary>ASCII Fallback</summary>
 
 ```
