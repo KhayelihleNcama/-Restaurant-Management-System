@@ -37,7 +37,52 @@ This Restaurant Management System (RMS) solves that by providing a single backen
 | Database | MongoDB + Mongoose |
 | Auth | JWT + bcrypt |
 | Dev Tools | Nodemon, Morgan, CORS, Dotenv |
+## 🏗️ System Architecture
 
+### High-Level Architecture
+
+```mermaid
+flowchart TB
+    subgraph Client["🖥️ Client Layer"]
+        UI[Web / Mobile UI]
+        PM[Postman / API Clients]
+    end
+
+    subgraph API["⚙️ Express.js API Server"]
+        MW[Middleware<br/>CORS · JSON · JWT Auth · Error Handler]
+        
+        subgraph Routes["API Routes"]
+            R1[/api/auth]
+            R2[/api/menu]
+            R3[/api/tables]
+            R4[/api/reservations]
+            R5[/api/orders]
+            R6[/api/inventory]
+            R7[/api/reports]
+        end
+        
+        subgraph Logic["Business Logic"]
+            L1[Order Processing]
+            L2[Table Availability Check]
+            L3[Inventory Auto-Deduct]
+            L4[JWT Authentication]
+        end
+    end
+
+    subgraph DB["🗄️ MongoDB Database"]
+        M1[(users)]
+        M2[(menu_items)]
+        M3[(tables)]
+        M4[(reservations)]
+        M5[(orders)]
+        M6[(inventory)]
+    end
+
+    UI --> MW
+    PM --> MW
+    MW --> Routes
+    Routes --> Logic
+    Logic --> DB
 ## Why This Project
 
 This project demonstrates real-world backend engineering: schema design for related entities, business logic layered on top of CRUD, authentication, transactional thinking (inventory consistency), and reporting — all the pieces that interviewers and production systems care about.
@@ -59,3 +104,5 @@ Future: WebSocket live order updates, payment gateway integration, multi-branch 
 
 Core features complete — orders, tables, reservations, inventory, reports, and auth all working.
 Future: WebSocket live order updates, payment gateway integration, multi-branch support.
+
+
